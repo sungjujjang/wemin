@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta htp-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
+    <title>위조 민증 등록</title>
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<script type="text/javascript" language = "javascript">
+    // 모바일 웹 주소창 숨기기
+    window.addEventListener('load', function() {
+    // body의 height를 살짝 늘리는 코드
+    document.body.style.height = (document.documentElement.clientHeight + 5) + 'px';
+    // scroll를 제어 하는 코드
+    setTimeout(scrollTo, 0, 0, 1);
+    }, false);
+</script>
+<body style="background-color: black;">
+    <div id="page-content-wrapper">
+        <nav class="navbar navbar-expand-lg navbar-light border-bottom" style="background-color: #181818;border: 0px; color: #fff;">
+            <a style="margin-left: 10px;">
+                위민
+            </a>
+            <a onclick="return goto()" style="margin-left: 10px;">
+                개설 사이트
+            </a>
+        </nav>
+        <div class="container-fluid1">
+
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                <strong>어드민 패널에 오신걸 환영합니다!</strong> 공지 사항을 확인해주세요!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+
+            <div style="margin-bottom: 10px; margin-left: 30px;margin-right: 30px; margin-top: 30px;">
+                <div style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <div class="card" style="border: 0px;">
+                            <div class="card-header" style="background-color: #121212; color: rgb(253, 251, 241);">
+                                공지
+                            </div> 
+                            <div class="card-body" style="background-color: #1d1d1d; color: rgb(253, 251, 241);">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-hover" id="board_table_approval"  style="background-color: #121212; color: rgb(253, 251, 241); display: inline-block; text-align: center;">
+                                                <pre style="text-align: center;"><%= User_data.data[0].Notice %></pre>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-bottom: 10px; margin-left: 30px;margin-right: 30px; margin-top: 30px;">
+                <div style="margin-bottom: 10px;">
+                    <div class="form-group">
+                        <div class="card" style="border: 0px;">
+                            <div class="card-header" style="background-color: #121212; color: rgb(253, 251, 241);">
+                                유저 관리
+                            </div> 
+                            <div class="card-body" style="background-color: #1d1d1d; color: rgb(253, 251, 241);">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <table class="table table-hover" id="board_table_approval"  style="background-color: #121212; color: rgb(253, 251, 241);">
+                                                <thead>
+                                                    <tr>
+                                                        <th>사진</th>
+                                                        <th>이름</th>
+                                                        <th>민증번호</th>
+                                                        <th>주소</th>
+                                                        <th>관리</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <% if(User_data.Token_data.length == 0) { %> 
+                                                        <tr>
+                                                            <td>데이터 없음</td>
+                                                            <td>데이터 없음</td>
+                                                            <td>데이터 없음</td>
+                                                            <td>데이터 없음</td>
+                                                            <td>데이터 없음</td>
+                                                        </tr>
+                                                    <% } %>
+                                                    <% for(const i in User_data.Token_data) { %>
+                                                        <tr>
+                                                            <td>
+                                                                <div style="    
+                                                                width: 100px;
+                                                                height: 100px; 
+                                                                border-radius: 70%;
+                                                                overflow: hidden;
+                                                            ">
+                                                                    <img style="    
+                                                                    width: 100%;
+                                                                    height: 100%;
+                                                                    object-fit: cover;" src="<%= User_data.Token_data[i].img_link %>">
+                                                                </div>
+                                                            </td>
+                                                            <td><a style="color: #fff;" href="/?token=<%= User_data.Token_data[i].token %>"><%= User_data.Token_data[i].name %></a></td>
+                                                            <td><%= User_data.Token_data[i].registration %></td>
+                                                            <td><%= User_data.Token_data[i].address %></td>
+                                                            <td><button class="btn btn-primary" onclick="return doAction('<%= User_data.Token_data[i].token %>')">관리</button></td>
+                                                        </tr>
+                                                    <% } %>
+
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <% if(admin === true) { %> 
+                <div style="margin-bottom: 10px; margin-left: 30px;margin-right: 30px;">
+                    <div style="margin-bottom: 10px;">
+                        <div class="form-group">
+                            <div class="card" style="border: 0px;">
+                                <div class="card-header" style="background-color: #121212; color: rgb(253, 251, 241);">
+                                    총판 관리
+                                    <button style="float: right;" class="btn btn-primary" onclick="return create()">만들기</button>
+                                </div> 
+                                <div class="card-body" style="background-color: #1d1d1d; color: rgb(253, 251, 241);">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <table class="table table-hover" id="board_table_approval"  style="background-color: #121212; color: rgb(253, 251, 241);">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>아이디</th>
+                                                            <th>권한</th>
+                                                            <th>토큰</th>
+                                                            <th>관리</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <% if(data.length == 0) { %> 
+                                                            <tr>
+                                                                <td>데이터 없음</td>
+                                                                <td>데이터 없음</td>
+                                                                <td>데이터 없음</td>
+                                                                <td>데이터 없음</td>
+                                                            </tr>
+                                                        <% } %>
+                                                        <% for(const i in data) { %>
+                                                            <tr>
+                                                                <td><a href="/admin?token=<%= data[i].token %>" style="color: #fff;"><%= data[i].id %></a></td>
+                                                                <td><%= data[i].role %></td>
+                                                                <td><%= data[i].token %></td>
+                                                                <td><button class="btn btn-danger" onclick="return deletes('<%= data[i].token %>')">삭제</button></td>
+                                                            </tr>
+                                                        <% } %>
+    
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="margin-bottom: 10px; margin-left: 30px;margin-right: 30px;">
+                    <div style="margin-bottom: 10px;">
+                        <div class="form-group">
+                            <div class="card" style="border: 0px;">
+                                <div class="card-header" style="background-color: #121212; color: rgb(253, 251, 241);">
+                                    공지 관리
+                                    <button style="float: right;" class="btn btn-primary" onclick="return save()">저장</button>
+                                </div> 
+                                <div class="card-body" style="background-color: #1d1d1d; color: rgb(253, 251, 241);">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <table class="table table-hover" id="board_table_approval"  style="background-color: #121212; color: rgb(253, 251, 241);">
+                                                    <textarea id="notice_admin" style="width:100%; text-align: center;" rows="10"><%= User_data.data[0].Notice %></textarea>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            <% } %>
+
+    </div>
+
+    <script>
+        function goto() {
+            const url = new URL(window.location.href);
+            // URLSearchParams 객체
+            const urlParams = url.searchParams;
+
+           let token = urlParams.get('token')
+           window.location.href = `/create?token=${token}`
+        }
+
+        function doAction(data) {
+            const url = new URL(window.location.href);
+            // URLSearchParams 객체
+            const urlParams = url.searchParams;
+
+           let token = urlParams.get('token')
+           window.location.href = `/edit?token=${token}&user_token=${data}`
+        }
+
+        function create() {
+            Swal.fire({
+                title: '총판 ID를 입력해주세요',
+                input: 'text',
+                inputAttributes: {
+                    autocapitalize: 'off'
+                },
+                showCancelButton: true,
+                confirmButtonText: '다음',
+                showLoaderOnConfirm: true,
+                preConfirm: (data) => {
+                    let id = data
+                    Swal.fire({
+                        title: '총판 토큰을 입력해주세요',
+                        input: 'text',
+                        inputAttributes: {
+                            autocapitalize: 'off'
+                        },
+                        showCancelButton: true,
+                        confirmButtonText: '다음',
+                        showLoaderOnConfirm: true,
+                        preConfirm: (data) => {
+                            let token = data
+                            Swal.fire({
+                                title: '총판 권한 을 입력해주세요',
+                                input: 'text',
+                                inputAttributes: {
+                                    autocapitalize: 'off'
+                                },
+                                showCancelButton: true,
+                                confirmButtonText: '다음',
+                                showLoaderOnConfirm: true,
+                                preConfirm: (data) => {
+                                    let role = data
+                                    const url = new URL(window.location.href);
+                                    // URLSearchParams 객체
+                                    const urlParams = url.searchParams;
+
+                                    let admin_token = urlParams.get('token')
+                                    return fetch('/api/admin_create', {
+                                        method: 'post',
+                                        headers: {
+                                            "Content-Type": "application/json",
+                                        },
+                                        body: JSON.stringify({
+                                            token,
+                                            id,
+                                            role,
+                                            admin_token
+                                        })
+                                    }).then((data) => {
+                                        if(data.ok != true) return alert("알수없는 이유로 총판을 만드는데 실패했습니다")
+                                        alert("성공적으로 총판을 만들었습니다")
+                                        return window.location.href = `/admin?token=${admin_token}`
+                                    })
+                                },
+                                allowOutsideClick: () => !Swal.isLoading()
+                            })
+                        },
+                        allowOutsideClick: () => !Swal.isLoading()
+                    })
+                },
+                allowOutsideClick: () => !Swal.isLoading()
+            })
+        }
+
+        function save() {
+            const url = new URL(window.location.href);
+            // URLSearchParams 객체
+            const urlParams = url.searchParams;
+
+           let admin_token = urlParams.get('token')
+
+            let textarea = document.querySelector("#notice_admin").value
+            fetch('/api/admin_noticeSave', {
+                method: 'post',
+                  headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    admin_token,
+                    textarea
+                })
+            }).then(data => {
+                if(data.ok != true) return alert("알 수 없는 오류로 데이터 저장에 실패했습니다")
+                alert("데이터 저장에 성공햇습니다")
+                return window.location.href = `/admin?token=${admin_token}`
+            })
+        }
+
+        function deletes(token) {
+            const url = new URL(window.location.href);
+            // URLSearchParams 객체
+            const urlParams = url.searchParams;
+
+           let admin_token = urlParams.get('token')
+           if(admin_token === token) return alert("본인의 토큰은 지울 수 없습니다")
+
+            fetch('/api/delete', {
+                method: 'post',
+                  headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    type: 'Admin',
+                    token,
+                    admin_token
+                })
+            }).then((data) => {
+                if(data.ok != true) return alert("알 수 없는 이유로 총판 의 데이터를 지우지 못했어요")
+                alert("총판 을 데이터를 삭제했습니다")
+                return window.location.href = `/admin?token=${admin_token}`
+            }).catch(err => {
+                alert(err)
+                console.log(err)
+            })
+        }
+    </script>
+
+</body>
+</html>
